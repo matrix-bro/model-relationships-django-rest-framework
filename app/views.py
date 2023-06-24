@@ -2,13 +2,21 @@ from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from app.models import Person
+from app.models import Passport, Person
 
 class AllPersonView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
+        
+        class PassportSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Passport
+                fields = ['id', 'passport_no',]
+
+        passport = PassportSerializer()
+        
         class Meta:
             model = Person
-            fields = ['id', 'name']
+            fields = ['id', 'name', 'passport', ]
 
     def get(self, request):
         person_list = Person.objects.all()
