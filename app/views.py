@@ -34,10 +34,17 @@ class AllPersonView(APIView):
 
 class AllPassportView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
+
+        class PersonSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Person
+                fields = ['id', 'name',]
+
+        person = PersonSerializer()
         
         class Meta:
             model = Passport
-            fields = ['id', 'passport_no', ]
+            fields = ['id', 'passport_no', 'person', ]
 
     def get(self, request):
         passports = Passport.objects.all()
