@@ -2,7 +2,7 @@ from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from app.models import Author, Passport, Person
+from app.models import Author, Book, Passport, Person
 
 class AllPersonView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
@@ -64,9 +64,16 @@ class AllPassportView(APIView):
 class AllAuthorView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
                 
+        class BookSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Book
+                fields = ['id', 'title',]
+
+        books = BookSerializer(many=True)
+
         class Meta:
             model = Author
-            fields = ['id', 'name', ]
+            fields = ['id', 'name', 'books', ]
 
     def get(self, request):
         authors = Author.objects.all()
