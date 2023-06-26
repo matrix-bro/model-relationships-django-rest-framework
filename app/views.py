@@ -92,9 +92,16 @@ class AllAuthorView(APIView):
 class AllBookView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
 
+        class AuthorSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Author
+                fields = ['id', 'name',]
+
+        author = AuthorSerializer()
+
         class Meta:
             model = Book
-            fields = ['id', 'title', ]
+            fields = ['id', 'title', "author"]
 
     def get(self, request):
         books = Book.objects.all()
