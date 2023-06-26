@@ -88,4 +88,25 @@ class AllAuthorView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+class AllBookView(APIView):
+    class OutputSerializer(serializers.ModelSerializer):
+
+        class Meta:
+            model = Book
+            fields = ['id', 'title', ]
+
+    def get(self, request):
+        books = Book.objects.all()
+        serializer = self.OutputSerializer(books, many=True)
+        serialized_data = serializer.data
+
+        return Response(
+            {
+                "success": True,
+                "message": "All Book retrieved successfully.",
+                "data": serialized_data,
+                "code": status.HTTP_200_OK,
+            }
+        )    
             
