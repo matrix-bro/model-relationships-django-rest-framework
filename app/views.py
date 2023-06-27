@@ -2,7 +2,7 @@ from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from app.models import Author, Book, Passport, Person
+from app.models import Author, Book, Course, Passport, Person, Student
 
 class AllPersonView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
@@ -116,4 +116,26 @@ class AllBookView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )    
-            
+
+
+class AllCourseView(APIView):
+    class OutputSerializer(serializers.ModelSerializer):
+
+        class Meta:
+            model = Course
+            fields = ["id", "name", ]
+
+    def get(self, request):
+        courses_list = Course.objects.all()
+
+        serializer = self.OutputSerializer(courses_list, many=True)
+        serialized_data = serializer.data
+
+        return Response(
+            {
+                "success": True,
+                "message": "All Courses retrieved successfully.",
+                "data": serialized_data,
+                "code": status.HTTP_200_OK,
+            }
+        )
