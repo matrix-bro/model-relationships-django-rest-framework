@@ -27,3 +27,22 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+    
+# Many to Many with Course and Student    
+class Course(models.Model):
+    name = models.CharField(max_length=100)
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    courses = models.ManyToManyField(Course, through="CourseStudent",
+                                     related_name="students")
+    # Using Intermediate table CourseStudent
+
+class CourseStudent(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    date_enrolled = models.DateField()
+
+    class Meta:
+        unique_together = ('student', 'course')
+        # To prevent duplicate entries of student and course together
