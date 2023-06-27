@@ -120,10 +120,17 @@ class AllBookView(APIView):
 
 class AllCourseView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
+        
+        class StudentSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Student
+                fields = ["id", "name", ]
+        
+        students = StudentSerializer(many=True)
 
         class Meta:
             model = Course
-            fields = ["id", "name", ]
+            fields = ["id", "name", "students"]
 
     def get(self, request):
         courses_list = Course.objects.all()
