@@ -1,6 +1,6 @@
 from django.urls import path
 
-from app.views import AllAuthorView, AllBookView, AllCourseView, AllPassportView, AllPersonView
+from app.views import AllAuthorView, AllBookView, AllCourseView, AllPassportView, AllPersonView, AllStudentView
 
 urlpatterns = [
     path('person/', AllPersonView.as_view(), name='person-list'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('books/', AllBookView.as_view(), name='book-list'),
 
     path('courses/', AllCourseView.as_view(), name='course-list'),
+    path('students/', AllStudentView.as_view(), name='student-list'),
 ]
