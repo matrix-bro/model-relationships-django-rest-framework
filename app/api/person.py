@@ -59,3 +59,16 @@ class AllPersonView(APIView):
             "data": serializer.data,
             "code": status.HTTP_201_CREATED,
         })
+    
+    """
+        Put: Update details of a Person
+    """
+    def put(self, request):
+        pass
+
+
+    """
+        Delete: Deletes a Person
+    """
+    def delete(self, request):
+        pass
