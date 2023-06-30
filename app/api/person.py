@@ -97,4 +97,28 @@ class AllPersonView(APIView):
         Delete: Deletes a Person
     """
     def delete(self, request):
-        pass
+        person_id = request.query_params.get("id")
+
+        person = Person.objects.filter(id=person_id).first()
+
+        if not person:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Person not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )    
+
+        person.delete()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Person deleted Successfully.",
+                "code": status.HTTP_200_OK,
+            }
+        )
+
+
