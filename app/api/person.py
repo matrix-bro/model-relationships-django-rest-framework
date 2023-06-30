@@ -64,7 +64,33 @@ class AllPersonView(APIView):
         Put: Update details of a Person
     """
     def put(self, request):
-        pass
+        person_id = request.query_params.get("id")
+        person = Person.objects.filter(id=person_id).first()
+
+        if not person:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Person not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        serializer = self.InputSerializer(person, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Person Updated Successfully.",
+                "data": serializer.data,
+                "code": status.HTTP_200_OK,
+            }
+        )
 
 
     """
