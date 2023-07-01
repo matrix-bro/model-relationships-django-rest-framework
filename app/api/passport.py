@@ -18,6 +18,9 @@ class AllPassportView(APIView):
             model = Passport
             fields = ['id', 'passport_no', 'person', ]
 
+    """
+       Get: Lists all passports with person 
+    """
     def get(self, request):
         passports = Passport.objects.all()
         serializer = self.OutputSerializer(passports, many=True)
@@ -31,3 +34,41 @@ class AllPassportView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    class InputSerializer(serializers.ModelSerializer):
+        passport_no = serializers.CharField(required=True)
+
+        class Meta:
+            model = Passport
+            fields = ('passport_no', )
+
+    """
+        Post: Creates a Passport of a Person
+    """
+    def post(self, request):
+        person_id = request.query_params.get("id")
+
+        person = Person.objects.filter(id=person_id).first()
+
+        if not person:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Person not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        serializer = self.InputSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(person=person)
+
+        return Response({
+            "success": True,
+            "message": "Passport created successfully.",
+            "data": serializer.data,
+            "code": status.HTTP_201_CREATED,
+        })
