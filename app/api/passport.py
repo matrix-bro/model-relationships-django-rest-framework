@@ -140,3 +140,31 @@ class AllPassportView(APIView):
             "data": serializer.data,
             "code": status.HTTP_201_CREATED,
         })
+    
+    """
+        Delete: Deletes a Passport
+    """
+    def delete(self, request):
+        passport_id = request.query_params.get("id")
+
+        passport = Passport.objects.filter(id=passport_id).first()
+
+        if not passport:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Passport not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )    
+
+        passport.delete()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Passport deleted Successfully.",
+                "code": status.HTTP_200_OK,
+            }
+        )
