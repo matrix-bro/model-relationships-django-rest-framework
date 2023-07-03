@@ -93,3 +93,31 @@ class AllAuthorView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    """
+        Delete: Deletes an Author
+    """
+    def delete(self, request):
+        author_id = request.query_params.get("id")
+
+        author = Author.objects.filter(id=author_id).first()
+
+        if not author:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Author not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )    
+
+        author.delete()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Author deleted Successfully.",
+                "code": status.HTTP_200_OK,
+            }
+        )
