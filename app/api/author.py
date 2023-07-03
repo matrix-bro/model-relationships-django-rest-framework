@@ -61,3 +61,35 @@ class AllAuthorView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    """
+        Put: Update details of an Author
+    """
+    def put(self, request):
+        author_id = request.query_params.get("id")
+        author = Author.objects.filter(id=author_id).first()
+
+        if not author:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Author not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        serializer = self.InputSerializer(author, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Author details updated successfully.",
+                "data": serializer.data,
+                "code": status.HTTP_200_OK,
+            }
+        )
