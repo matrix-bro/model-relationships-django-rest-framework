@@ -73,3 +73,16 @@ class AllBookView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    """
+        Put: Update details of a Book
+    """
+    def put(self, request):
+        pass
+
+
+    """
+        Delete: Deletes a Book
+    """
+    def delete(self, request):
+        pass
