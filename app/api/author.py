@@ -117,7 +117,7 @@ class AllAuthorView(APIView):
         return Response(
             {
                 "success": True,
-                "message": "Author deleted Successfully.",
+                "message": "Author deleted successfully.",
                 "code": status.HTTP_200_OK,
             }
         )
