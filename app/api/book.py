@@ -78,7 +78,48 @@ class AllBookView(APIView):
         Put: Update details of a Book
     """
     def put(self, request):
-        pass
+        author_id = request.query_params.get("author_id")
+        book = Book.objects.filter(id=request.query_params.get("id")).first()
+
+        if not book:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Book not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        if author_id:
+            author = Author.objects.filter(id=request.query_params.get("author_id")).first()
+            if not author:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Author not found.",
+                        "code": status.HTTP_400_BAD_REQUEST,
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+            book.author = author
+        
+        serializer = self.InputSerializer(book, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        
+        book.title = serializer.validated_data['title']
+        book.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Book details updated successfully.",
+                "data": serializer.data,
+                "code": status.HTTP_200_OK,
+            }
+        )
 
 
     """
