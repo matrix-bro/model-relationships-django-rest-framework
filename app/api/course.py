@@ -61,3 +61,15 @@ class AllCourseView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    """
+        Put: Update details of a Course
+    """
+    def put(self, request):
+        pass
+
+    """
+        Delete: Deletes a Course
+    """
+    def delete(self, request):
+        pass
