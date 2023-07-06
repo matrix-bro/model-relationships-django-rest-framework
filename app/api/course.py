@@ -18,6 +18,9 @@ class AllCourseView(APIView):
             model = Course
             fields = ["id", "name", "students"]
 
+    """
+       Get: Lists all courses with students
+    """
     def get(self, request):
         courses_list = Course.objects.all()
 
@@ -29,6 +32,32 @@ class AllCourseView(APIView):
                 "success": True,
                 "message": "All Courses retrieved successfully.",
                 "data": serialized_data,
+                "code": status.HTTP_200_OK,
+            }
+        )
+    
+    class InputSerializer(serializers.ModelSerializer):
+        name = serializers.CharField(required=True)
+
+        class Meta:
+            model = Course
+            fields = ("name",)
+
+    """
+        Post: Creates a Course
+    """
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        
+        serializer.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Course created successfully.",
+                "data": serializer.data,
                 "code": status.HTTP_200_OK,
             }
         )
