@@ -66,7 +66,33 @@ class AllCourseView(APIView):
         Put: Update details of a Course
     """
     def put(self, request):
-        pass
+        course_id = request.query_params.get("id")
+        course = Course.objects.filter(id=course_id).first()
+
+        if not course:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Course not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        serializer = self.InputSerializer(course, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        
+        serializer.save()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Course updated successfully.",
+                "data": serializer.data,
+                "code": status.HTTP_200_OK,
+            }
+        )
 
     """
         Delete: Deletes a Course
