@@ -98,4 +98,26 @@ class AllCourseView(APIView):
         Delete: Deletes a Course
     """
     def delete(self, request):
-        pass
+        course_id = request.query_params.get("id")
+
+        course = Course.objects.filter(id=course_id).first()
+
+        if not course:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Course not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )    
+
+        course.delete()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Course deleted successfully.",
+                "code": status.HTTP_200_OK,
+            }
+        )
