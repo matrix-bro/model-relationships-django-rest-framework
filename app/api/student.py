@@ -77,3 +77,15 @@ class AllStudentView(APIView):
                 "code": status.HTTP_200_OK,
             }
         )
+    
+    """
+        Put: Update details of a Student
+    """
+    def put(self, request):
+        pass
+
+    """
+        Delete: Deletes a Student
+    """
+    def delete(self, request):
+        pass
