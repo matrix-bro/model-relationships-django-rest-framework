@@ -188,4 +188,26 @@ class AllStudentView(APIView):
         Delete: Deletes a Student
     """
     def delete(self, request):
-        pass
+        student_id = request.query_params.get("id")
+
+        student = Student.objects.filter(id=student_id).first()
+
+        if not student:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Student not found.",
+                    "code": status.HTTP_400_BAD_REQUEST,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )    
+
+        student.delete()
+
+        return Response(
+            {
+                "success": True,
+                "message": "Student deleted successfully.",
+                "code": status.HTTP_200_OK,
+            }
+        )
